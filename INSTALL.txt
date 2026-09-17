@@ -1,0 +1,22 @@
+OBS Zoom Focus Filter - Practical Edition
+
+Windows x64用。
+
+ビルド後のZIPを展開し、
+obs-zoom-focus フォルダを
+
+C:\ProgramData\obs-studio\plugins
+
+へコピーしてください。
+
+OBSを再起動後、
+対象ソース → フィルタ → Zoom Focus Filter
+
+で追加します。
+
+操作:
+左クリック       = クリック位置を拡大
+ドラッグ         = 拡大位置を移動
+ホイール         = 拡大/縮小
+ダブルクリック   = リセット
+ESC              = リセット

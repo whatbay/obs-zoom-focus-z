@@ -1,0 +1,41 @@
+name: Build Zoom Focus - Windows x64
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure
+        shell: pwsh
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64
+
+      - name: Build
+        shell: pwsh
+        run: cmake --build build --config RelWithDebInfo
+
+      - name: Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path package\obs-zoom-focus\bin\64bit
+          New-Item -ItemType Directory -Force -Path package\obs-zoom-focus\data\locale
+
+          Copy-Item build\RelWithDebInfo\obs-zoom-focus.dll package\obs-zoom-focus\bin\64bit\
+          Copy-Item data\zoom-focus.effect package\obs-zoom-focus\data\
+          Copy-Item data\locale\ja-JP.ini package\obs-zoom-focus\data\locale\
+
+          Compress-Archive -Path package\obs-zoom-focus -DestinationPath obs-zoom-focus-windows-x64.zip
+
+      - name: Upload Windows ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: obs-zoom-focus-windows-x64
+          path: obs-zoom-focus-windows-x64.zip

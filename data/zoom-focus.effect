@@ -1,0 +1,36 @@
+uniform float4x4 ViewProj;
+uniform texture2d image;
+uniform float2 center;
+uniform float zoom;
+
+sampler_state textureSampler {
+    Filter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+struct VertData {
+    float4 pos : POSITION;
+    float2 uv  : TEXCOORD0;
+};
+
+VertData VSDefault(VertData v)
+{
+    v.pos = mul(float4(v.pos.xyz, 1.0), ViewProj);
+    return v;
+}
+
+float4 PSDraw(VertData v) : TARGET
+{
+    float2 uv = (v.uv - center) / max(zoom, 1.0) + center;
+    return image.Sample(textureSampler, uv);
+}
+
+technique Draw
+{
+    pass
+    {
+        vertex_shader = VSDefault(v);
+        pixel_shader = PSDraw(v);
+    }
+}
