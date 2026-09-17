@@ -14,6 +14,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # OBS SDK / libobs の取得ステップ（依存プロジェクトの要件に合わせたSDK zip等の展開）
+      - name: Download OBS Studio SDK
+        run: |
+         curl -sL -o obs-studio-sdk.zip https://github.com/obsproject/obs-studio/releases/download/30.0.0/obs-studio-30.0.0-x64.zip
+         7z x obs-studio-sdk.zip -o"C:/obs-sdk"    
+
       - name: Configure
         shell: pwsh
         run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64
